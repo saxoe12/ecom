@@ -1,0 +1,31 @@
+/* Uniformiser les images */
+.card-img-wrapper {
+  height: 0px; /* même hauteur pour toutes */
+  overflow: hidden;
+  border-top-left-radius: .75rem;
+  border-top-right-radius: .75rem;
+}
+.card-img-top {
+  height: 80%;
+  width: 80%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+.product-card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+/* Hauteur min description */
+.description {
+  min-height: 40px; /* tu peux ajuster */
+}
+
+/* Animation bouton */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.btn-pulse {
+  animation: pulse 2s infinite;
+}

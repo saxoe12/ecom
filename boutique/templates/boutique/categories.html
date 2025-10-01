@@ -1,0 +1,90 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+{% block title %}Catégories{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+  <!-- Titre -->
+  <h2 class="text-center mb-4 fw-bold">✨ Nos Produits ✨</h2>
+
+  <!-- Barre de recherche -->
+  <form method="get" class="mb-5 d-flex justify-content-center">
+    <div class="input-group w-50 shadow-sm">
+      <span class="input-group-text bg-primary text-white"><i class="bi bi-search"></i></span>
+      <input type="text" name="q" class="form-control" placeholder="Rechercher un produit..." value="{{ query }}">
+      <button class="btn btn-primary" type="submit">Rechercher</button>
+    </div>
+  </form>
+
+  <!-- Grille Produits -->
+  <div class="row ">
+  {% for produit in produits %}
+   <div class="col-6 col-sm-4 col-md-4 col-lg-3 mb-4">
+  <div class="card h-100 border-0 shadow-sm product-card" style="width: 200px; height: 300px;">
+    <div class="card-img-wrapper">
+      <img src="{{ produit.image }}" class="card-img-top" alt="{{ produit.titre }}">
+    </div>
+    <div class="card-body d-flex flex-column">
+      <h6 class="card-title fw-bold text-truncate">{{ produit.titre }}</h6>
+      <p class="card-text text-muted small flex-grow-1 description">
+        {{ produit.description|truncatewords:12 }}
+      </p>
+      <p class="fs-6 fw-semibold text-success">{{ produit.prix }} €</p>
+      <a href="{{ produit.lien_affiliation }}" target="_blank"
+         class="btn btn-sm btn-warning fw-bold mt-auto w-100 btn-pulse">
+         🛒 Acheter sur Amazone
+      </a>
+    </div>
+  </div>
+</div>
+
+  {% empty %}
+    <p class="text-center text-muted">Aucun produit trouvé.</p>
+  {% endfor %}
+</div>
+  
+
+  <!-- Pagination -->
+  <nav class="mt-5">
+    <ul class="pagination justify-content-center">
+      {% if produits.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ produits.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">⬅ Précédent</a>
+        </li>
+      {% endif %}
+
+      {% for num in produits.paginator.page_range %}
+        <li class="page-item {% if produits.number == num %}active{% endif %}">
+          <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+        </li>
+      {% endfor %}
+
+      {% if produits.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ produits.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Suivant ➡</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+          card.style.transform = 'scale(1.05)';
+          card.style.transition = 'transform 0.3s ease';
+      });
+      card.addEventListener('mouseleave', () => {
+          card.style.transform = 'scale(1)';
+      });
+  });
+</script>
+{% endblock %}
+
+
