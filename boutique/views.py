@@ -29,7 +29,7 @@ def liste_produits(request):
             Q(titre__icontains=query) | Q(description__icontains=query)
         )
 
-    paginator = Paginator(produits_list, 4)  # 4 produits par page
+    paginator = Paginator(produits_list, 8)  # 8 produits par page
     page = request.GET.get('page')
     produits = paginator.get_page(page)
 
