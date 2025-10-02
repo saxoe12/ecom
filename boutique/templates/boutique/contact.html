@@ -1,19 +1,24 @@
 {% extends 'boutique/base.html' %}
-
 {% block title %}Contact{% endblock %}
 
 {% block content %}
-<h2>Contactez-nous</h2>
+<div class="container my-5">
+    <h2 class="text-center mb-4">📩 Contactez-nous</h2>
 
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-success">{{ message }}</div>
-  {% endfor %}
-{% endif %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary">Envoyer</button>
-</form>
+    <form method="post" class="w-75 mx-auto shadow-sm p-4 rounded bg-light">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3 w-100">Envoyer</button>
+    </form>
+</div>
 {% endblock %}
+
+

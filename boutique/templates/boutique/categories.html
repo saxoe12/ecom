@@ -9,13 +9,12 @@
   <h2 class="text-center mb-4 fw-bold">✨ Nos Produits ✨</h2>
 
   <!-- Barre de recherche -->
-  <form method="get" class="mb-5 d-flex justify-content-center">
-    <div class="input-group w-50 shadow-sm">
-      <span class="input-group-text bg-primary text-white"><i class="bi bi-search"></i></span>
-      <input type="text" name="q" class="form-control" placeholder="Rechercher un produit..." value="{{ query }}">
-      <button class="btn btn-primary" type="submit">Rechercher</button>
-    </div>
-  </form>
+  <form method="get" action="{% url 'categories' %}" class="d-flex mb-4">
+  <input class="form-control me-2" type="search" placeholder="Rechercher un produit..."
+         name="q" value="{{ query }}">
+  <button class="btn btn-primary" type="submit">🔍</button>
+</form>
+
 
   <!-- Grille Produits -->
   <div class="row ">

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from .forms import ContactForm
@@ -30,8 +30,8 @@ def liste_produits(request):
         )
 
     paginator = Paginator(produits_list, 4)  # 4 produits par page
-    page_number = request.GET.get('page')
-    produits = paginator.get_page(page_number)
+    page = request.GET.get('page')
+    produits = paginator.get_page(page)
 
     return render(request, 'boutique/categories.html', {
         'produits': produits,
@@ -40,23 +40,26 @@ def liste_produits(request):
 
 
 def contact(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
             nom = form.cleaned_data['nom']
+            sujet = form.cleaned_data['sujet']
             message = form.cleaned_data['message']
-            
-            send_mail(
-                f'Contact depuis le site : {nom}',
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                ['thierry.toure67@gmail.com'],  # tu peux mettre ton email ici
-                fail_silently=False,
-            )
-            
-            messages.success(request, 'Merci ! Votre message a été envoyé.')
-            form = ContactForm()  # réinitialise le formulaire
+
+            try:
+                send_mail(
+                    f"{sujet} - de {nom}",
+                    message,
+                    settings.EMAIL_HOST_USER,       # expéditeur
+                    [settings.EMAIL_HOST_USER],     # destinataire
+                    fail_silently=False,
+                )
+                messages.success(request, "Votre message a été envoyé avec succès !")
+                return redirect('contact')  # redirige pour vider le formulaire
+            except Exception as e:
+                messages.error(request, f"Erreur lors de l'envoi : {e}")
     else:
         form = ContactForm()
-    
+
     return render(request, 'boutique/contact.html', {'form': form})
